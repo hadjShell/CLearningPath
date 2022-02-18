@@ -446,8 +446,56 @@ void q8_1(void) {
     }
 }
 
+void q8_2(void) {
+    int m, n;
+    scanf("%d%d", &m, &n);
+    int a[m][n];
+    for(int i = 0; i < m; i++)
+        for(int j = 0; j < n; j++) {
+            scanf("%d", &a[i][j]);
+        }
+
+    int cnt = 0;
+
+    for(int i = 1; i < m - 1; i++)
+        for(int j = 1; j < n - 1; j++) {
+            if(a[i][j] > a[i-1][j] && a[i][j] > a[i][j+1] &&
+               a[i][j] > a[i+1][j] && a[i][j] > a[i][j-1]) {
+                    printf("%d %d %d\n", a[i][j], i + 1, j + 1);
+                    cnt++;
+               }
+        }
+
+    if(!cnt) {
+        printf("None %d %d\n", m, n);
+    }
+}
+
+void q8_3(void) {
+    int num[10];
+    for(int i= 0; i < 10; i++) {
+        scanf("%d", &num[i]);
+    }
+
+    for(int i = 1; i < 10; i++) {
+        if(num[i] != 0) {
+            printf("%d", i);
+            num[i]--;
+            break;
+        }
+    }
+
+    for(int i = 0; i < 10; i++) {
+        for(int j = 0; j < num[i]; j++) {
+            printf("%d", i);
+        }
+    }
+
+    printf("\n");
+}
+
 int main() {
-    q8_1();
+    q8_3();
 
     return 0;
 }

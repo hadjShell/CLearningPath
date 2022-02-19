@@ -494,8 +494,32 @@ void q8_3(void) {
     printf("\n");
 }
 
+void diffTrinity(void);
+
 int main() {
-    q8_3();
+    //q8_3();
 
     return 0;
+}
+
+void diffTrinity(void) {
+    int array[5] = {0};
+
+    // ERROR
+    // Because array is a const pointer
+    // array = 5345454;
+
+	printf("        array = %p\n", array);
+	printf("       &array = %p\n", &array);
+	printf("    &array[0] = %p\n", &array[0]);
+	printf("    array + 1 = %p\n", array + 1);
+	printf("&array[0] + 1 = %p\n", &array[0] + 1);
+	printf("   &array + 1 = %p\n", &array + 1);
+
+	printf("\n");
+
+	printf(" sizeof(array) = %d\n", sizeof(array));
+	printf("sizeof(&array) = %d\n", sizeof(&array));
+
+	printf("\n");
 }

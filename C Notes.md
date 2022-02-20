@@ -1,9 +1,16 @@
 ---
 Author: Jiayuan Zhang
-Date: 06/02/2022
+Date: 06/02/2022 
 ---
 
-# [C - 翁恺](https://www.bilibili.com/video/BV19W411B7w1?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click)
+# C Notes
+
+***
+
+## Reference
+
+* [C语言程序设计 - 翁恺](https://www.bilibili.com/video/BV19W411B7w1?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click)
+* Kernighan, B.W. & Ritchie, D.M. (1988) The C programming language. 2nd ed.. Englewood Cliffs, N.J.: Prentice Hall.
 
 ***
 
@@ -36,11 +43,13 @@ Date: 06/02/2022
 
   > C implementations give a better understanding of how the machine behaves. There is no language runtime environment or virtual machine between you and the underlying machine. 
 
+* C is a general-purpose programming language.
+
 * 指针是C的灵魂
 
 * C的应用场景：
 
-  * 操作系统
+  * 操作系统，编译器
   * 嵌入式系统
   * 驱动程序
   * 底层驱动

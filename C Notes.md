@@ -43,6 +43,8 @@ Date: 06/02/2022
 
   > C implementations give a better understanding of how the machine behaves. There is no language runtime environment or virtual machine between you and the underlying machine. 
 
+* 标准：`ANSI C` -> `C99`
+
 * C is a general-purpose programming language.
 
 * 指针是C的灵魂
@@ -347,6 +349,9 @@ Date: 06/02/2022
 
 ## 流程控制
 
+* 结构化的基石
+* 块：`{}`
+
 ### 选择
 
 #### If - else
@@ -397,6 +402,7 @@ Date: 06/02/2022
 ## 函数
 
 * 函数是可以重复利用的代码块，接受零个或多个参数，做一件事情，并返回零个或一个值
+* 函数本质是占用一片连续内存的代码
 * 函数定义
   * 函数头：返回类型 函数名 参数列表
   * 函数体
@@ -492,6 +498,12 @@ Date: 06/02/2022
   * 检查行
   * 检查列
   * 检查对角线，反对角线
+* `const`数组
+  * `const <type> identifier[] = {0, };`
+  * 表明每个数组单元都是`const`
+  * 必须通过初始化进行赋值
+  * **保护数组**不被函数破坏
+
 
 ***
 
@@ -530,7 +542,7 @@ Date: 06/02/2022
 
 * 指针与数组
 
-  * 函数参数表中的数组实际上是指针，但是可以用数组的运算符`[]`进行计算
+  * 函数参数表中的数组实际上是指针，但是可以用数组的运算符`[]`进行计算，不再含有数组长度信息
 
   * `void func(int a[]);`和`void func(int* a);`作为函数原型是等价的
 
@@ -542,7 +554,7 @@ Date: 06/02/2022
 
   * `array`, `&array`, `&array[0]`区别
 
-    * `array`可以当作一个**指针常量**，指向**数组第一个元素**
+    * `array`可以**当作**一个**指针常量**，指向**数组第一个元素**
 
       * 两种情况数组名不是用指针常量来表示
         1. `sizeof(array)`：返回整个数组的长度，而不是指针的长度
@@ -559,6 +571,7 @@ Date: 06/02/2022
     ```c
     int main() {
         int array[5] = {0};
+        int (*p)[5] = &array;	// pointer to whole array
     
         // ERROR
         // Because array is a const pointer
@@ -595,4 +608,143 @@ Date: 06/02/2022
 
 * 指针与`const`
 
-  * 
+  * 指针是`const`：
+    * `<type>* const p;`
+    * 该指针变量一旦得到了地址值，不能再指向其他变量
+  * 指针所指的是`const`：
+    * `<type> const* p;`，`const <type>* p;`
+    * 表示不能通过这个指针去修改指向的变量，**并不能**使得那个变量成为`const`
+  * 总是可以把一个非`const`的值转换成`const`
+    * 当要传递的参数类型比地址大的时候，这是一种常用的手段：既能用较少的字节数传递值给参数，又能避免函数修改外面的变量
+
+* 指针运算
+
+  * 给指针加，减一个整数
+
+    * **偏移量**
+    * 如果指针不是指向一片连续分配的空间，如数组，则这种计算没有意义
+
+  * 递增递减
+
+  * 两个指针相减
+
+    * 结果也是偏移量
+
+  * `*p++`
+
+    * 取出`p`所指的数据，然后把`p`移到下一个位置去
+
+    * `*`的优先级低于`++ --`
+
+    * 常用于数组类的连续空间操作
+
+      ```c
+      char array[] = {0, 1, 2, -1};
+      char* p = array;
+      
+      while(*p != -1) {
+          printf("%d", *p++);
+      }
+      ```
+
+    * 在某些CPU上，这可以直接被翻译成一条汇编指令
+
+  * 比较
+
+  * 0地址
+
+    * 所有程序都有0地址，通常不能随意读写
+    * `NULL`是一个预定义的符号，表示0地址
+    * 可以用0地址来表示特殊的事情
+      * 返回的指针是无效的
+      * 指针没有被真正初始化（先初始化为0）
+
+* 指针的类型转换
+
+  * `void*`表示不知道指向什么的指针
+    * 不能访问数据
+    * 计算与`char*`相同（不相通）
+    * 往往用在底层程序中
+  * `(<type>*) identifier;`
+  * 并不改变指向变量的类型
+
+* 动态内存分配
+
+  * ```c
+    #include <stdlib.h>
+    <type>* p = (<type>*) malloc(n * sizeof(<type>));
+    if(p != NULL) {
+        // statement
+    }
+    free(p);
+    ```
+
+  * `C99`可以直接用变量定义数组大小
+
+  * `void* malloc(size_t size);`
+
+    * 申请的空间大小是以字节为单位的
+    * 需要自己将返回结果转换成自己需要的类型
+    * 申请失败返回`0(NULL)`
+
+  * `free()`
+
+    * 把申请的来的空间还给系统
+    * 只能还**申请**来的空间的**首地址**
+    * `free(NULL)`不会出错
+
+* 指针与函数
+
+  * 函数名就是函数体代码的起始地址
+  * 通过函数名调用函数，本质为指定具体地址的跳转执行
+  * 可以定义指针保存函数入口地址
+  * `<type> (*pFunc)(<type1>, <type2>) = func;`
+  * `&func`和`func`数值相同，意义相同
+  * 调用函数：`pFunc(par);`或`*pFunc(par);`
+  * 不能进行指针运算
+  * 应用：使用相同代码实现不同功能
+
+      ```c
+      #include <stdio.h>
+      
+      int add(int a, int b)
+      {
+          return a + b;
+      }
+      
+      int mul(int a, int b)
+      {
+          return a * b;
+      }
+      
+      int calculate(int a[], int len, int(*cal)(int, int))
+      {
+          int ret = a[0];
+          int i = 0;
+      
+          for(i=1; i<len; i++)
+          {
+              ret = cal(ret, a[i]);
+          }
+      
+          return ret;
+      }
+      
+      int main()
+      {
+          int a[] = {1, 2, 3, 4, 5};
+      
+          printf("1 + ... + 5 = %d\n", calculate(a, 5, add));
+          printf("1 * ... * 5 = %d\n", calculate(a, 5, mul));
+      
+          return 0;
+      }
+      
+      ```
+
+***
+
+  ## 字符数组和字符串
+
+
+

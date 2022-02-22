@@ -496,8 +496,18 @@ void q8_3(void) {
 
 void diffTrinity(void);
 
+void t1(void) {}
+void t2(void) {}
+void t3(void) {}
+
 int main() {
     //q8_3();
+    void* p1 = &t1;
+    void* p2 = &t2;
+    void* p3 = &t3;
+    printf("%p\n", p1);
+    printf("%p\n", p2);
+    printf("%p\n", p3);
 
     return 0;
 }

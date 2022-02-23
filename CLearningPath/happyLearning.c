@@ -502,12 +502,14 @@ void t3(void) {}
 
 int main() {
     //q8_3();
-    void* p1 = &t1;
-    void* p2 = &t2;
-    void* p3 = &t3;
-    printf("%p\n", p1);
-    printf("%p\n", p2);
-    printf("%p\n", p3);
+    char s1[6] = "hello";
+    char s2[4];
+
+    strncpy(s2, s1, 3);
+
+    printf("%p\n", s1);
+    printf("%p\n", s2);
+    printf("%s", s2);
 
     return 0;
 }

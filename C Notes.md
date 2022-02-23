@@ -651,13 +651,13 @@ Date: 06/02/2022
 
   * 比较
 
-  * 0地址
+* 0地址
 
-    * 所有程序都有0地址，通常不能随意读写
-    * `NULL`是一个预定义的符号，表示0地址
-    * 可以用0地址来表示特殊的事情
-      * 返回的指针是无效的
-      * 指针没有被真正初始化（先初始化为0）
+  * 所有程序都有0地址，通常不能随意读写
+  * `NULL`是一个预定义的符号，表示0地址
+  * 可以用0地址来表示特殊的事情
+    * 返回的指针是无效的
+    * 指针没有被真正初始化（**先初始化为0**）
 
 * 指针的类型转换
 
@@ -746,5 +746,196 @@ Date: 06/02/2022
 
   ## 字符数组和字符串
 
+* 字符数组：`char word[] = {'H', 'E', 'L', 'L', 'O'};`
 
+### 字符串
 
+* `char word[] = {'H', 'E', 'L', 'L', 'O', '\0'};`
+
+* 以`0`（整数0）结尾的一串字符
+
+* `0`或`\0`是一样的（字节大小不同，4：1），但是和`'0'`不同
+
+* `0`表示字符串的结束，但它不是字符串的一部分，计算长度时不包含这个`0`
+
+* 字符串以数组形式存在，以数组或指针的形式访问，更多的是以指针的形式
+
+* `string.h`
+
+* 字符串常量
+
+  * `"string"`
+  * 会被编译器变成一个字符数组放在只读代码段，数组长度是`字符个数+1`，结尾有表示结束的`0`
+  * 两个相邻的字符串常量会连接起来
+
+* 字符串变量
+
+  * `char* str = "Hello";`
+    * `str`是一个指针，初始化为指向一个字符串常量
+    * 因为字符串常量不能被修改，所以实际上`str`是`const char*`类型
+    * 历史原因，编译器接受不带`const`的写法
+    * 试图对`str`所指的字符串做写入会导致程序崩溃
+  * `char word[] = "Hello";`
+    * 定义为数组类型可以修改内部的字符串
+    * 实际上编译器隐式地将字符串常量拷贝到定义的数组空间
+  * 指针还是数组？
+    * **构造**字符串：数组
+    * **处理**字符串：指针
+  * `char line[10] = "Hello";`
+
+* 字符串赋值：`char* str1 = "hello";    char* str2 = str1;`
+
+  * 并没有产生新的字符串，只是让`str2`指向了`str1`所指的字符串
+
+* 字符串输入输出：`%s`
+
+  * `scanf`读入一个单词（到空格，tab或回车为止）
+  * `scanf`是不安全的，因为不知道要读入的内容的长度
+  * `%7s`：安全的输入，数字表示最多允许读入的字符数量。如果输入的长度超过指定长度，下一次的`scanf`会在上一次读入的终点接着读
+
+* 空字符串
+
+  * `char buffer[100] = "";`
+    * 一个空字符串，`buffer[0] == '\0'`
+  * `char buffer[] = "";`
+    * 这个数组长度只有1
+
+* 字符串数组
+
+  * `char** a`
+
+    * `a`是一个指针，指向另一个指针，那个指针指向一个字符（串）
+
+  * `char a[][size]`
+
+    * 可以表示一个字符串数组，但是里面的字符串大小有限制
+
+  * `char* a[]`
+
+    * 也可以表示一个字符串数组，里面是一个个指向字符串的指针
+
+    * `<type> (*p1)[size]`和`<type>* p2[size]`的区别
+
+      > [一个很好的解释](https://www.geeksforgeeks.org/difference-between-int-p3-and-int-p3/)
+      >
+      > 一个是指向整个数组的指针，一个是数据元素是指针的数组
+      >
+      > `*p1`返回的是指向的数组的首地址
+      >
+      > `*p2`返回的是指针数组里第一个指针元素的值
+
+* 程序参数
+
+  * `int main(int argc, char const *argv[])`
+  * `argv[0]`是命令本身，当使用`Unix`的符号链接时，反应符号链接的名字
+
+* `putchar`
+
+  * `int putchar(int c);`
+  * 向标准输出写一个字符
+  * 返回写了几个字符，`EOF(-1)`表示写失败
+
+* `getchar`
+
+  * `int getchar(void);`
+  * 从标准输入读入一个字符
+  * 返回读到的字符
+  * 返回`EOF`
+    * Windows：`Ctrl + Z`
+    * Unix：`Ctrl + D`
+  * `shell`进行行编辑，然后程序从缓冲区读入数据
+
+* 字符串函数
+
+  * `strlen`
+
+    * `size_t strlen(const char *s);`
+    * 返回字符串的长度
+
+  * `strcmp`
+
+    * `int strcmp(const char *s1, const char *s2);`
+    * 比较两个字符串，返回：
+      * `0`：`s1 == s2`
+      * `s1[idx] - s2[idx]`：`s1 != s2`，`idx`是第一个不相等字符的下标
+
+  * `strcpy`
+
+    * `char* strcpy(char* restrict dst, const char* restrict src);`
+
+    * 把`src`的字符串拷贝到`dst`，返回`dst`
+
+    * `restrict`关键字：表明不重叠（`C99`）
+
+      ```c
+      char* dst = (char*) malloc(strlen(src) + 1);
+      strcpy(dst, src);
+      ```
+
+  * `strcat`
+
+    * `char* strcat(char* restrict s1, const char* restrict s2);`
+    * 把`s2`拷贝到`s1`的后面，接成一个长的字符串，返回`s1`
+    * `s1`必须有足够的空间
+
+  * `strcpy`和`strcat`都可能出现安全问题，即目标没有足够的空间。尽可能不要使用这两个函数
+
+  * 安全版本
+
+    * `char* strncpy(char* restrict dst, const char* restrict src, size_t n);`
+    * `char* strncat(char* restrict s1, const char* restrict s2, size_t n);`
+
+  * `strncmp`
+
+    * `int strncmp(const char *s1, const char *s2, size_t n);`
+    * 比较前n个字符
+
+  * `strchr`，`strrchr`
+
+    * 字符串中找字符，一个从左开始，一个从右开始
+
+    * `char* strchr(const char* s, int c);`
+
+    * `char* strrchr(const char* s, int c);`
+
+    * 返回指针，返回`NULL`表示没有找到
+
+    * 找第二个
+
+      ```c
+      char s[] = "Hello";
+      char* p = strchr(s, 'l');
+      p = strchr(p + 1, 'l');
+      ```
+
+    * 找到后拷贝
+
+      ```c
+      char s[] = "Hello";
+      char* p = strchr(s, 'l');
+      
+      // 拷贝后一段
+      {
+          char* t = (char*) malloc(strlen(p) + 1);
+      	strcpy(t, p);
+          printf("%s\n", t);
+          free(t);
+      }
+      
+      // 拷贝前一段
+      {
+          char c = *p;
+          *p = '\0';
+          char* t = (char*) malloc(strlen(s) + 1);
+          strcpy(t, s);
+          *p = c;
+          printf("%s\n", t);
+          free(t);
+      }
+      ```
+
+  * `strstr`，`strcasestr`
+
+    * 字符串中找字符串，`strcasestr`忽略大小写
+    * `char* strstr(const char* s1, const char* s2);`
+    * `char* strcasestr(const char* s1, const char* s2);`

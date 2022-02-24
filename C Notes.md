@@ -697,47 +697,92 @@ Date: 06/02/2022
 * 指针与函数
 
   * 函数名就是函数体代码的起始地址
+
   * 通过函数名调用函数，本质为指定具体地址的跳转执行
+
   * 可以定义指针保存函数入口地址
+
   * `<type> (*pFunc)(<type1>, <type2>) = func;`
+
   * `&func`和`func`数值相同，意义相同
+
   * 调用函数：`pFunc(par);`或`*pFunc(par);`
+
   * 不能进行指针运算
-  * 应用：使用相同代码实现不同功能
+
+  * 应用：
+
+      * 让程序跳转到固定地址执行，多用于嵌入式开发
+      * 回调函数（监听器模式的基础）
+          * 调用者**不知道**具体事件发生时需要的调用函数
+          * 被调函数**不知道**何时被调用，只知道需要完成的任务
+          * 当具体时间发生时，调用者通过函数指针调用具体函数
+          * 回调机制中调用者和被调函数**互不依赖**
 
       ```c
       #include <stdio.h>
       
-      int add(int a, int b)
+      typedef int(*Weapon)(int);
+      
+      void fight(Weapon wp, int arg)
       {
-          return a + b;
+          int result = 0;
+          
+          printf("Fight boss!\n");
+          
+          result = wp(arg);
+          
+          printf("Boss loss: %d\n", result);
       }
       
-      int mul(int a, int b)
+      int knife(int n)
       {
-          return a * b;
-      }
-      
-      int calculate(int a[], int len, int(*cal)(int, int))
-      {
-          int ret = a[0];
+          int ret = 0;
           int i = 0;
-      
-          for(i=1; i<len; i++)
+          
+          for(i=0; i<n; i++)
           {
-              ret = cal(ret, a[i]);
+              printf("Knife attack: %d\n", 1);
+              ret++;
           }
+          
+          return ret;
+      }
       
+      int sword(int n)
+      {
+          int ret = 0;
+          int i = 0;
+          
+          for(i=0; i<n; i++)
+          {
+              printf("Sword attack: %d\n", 5);
+              ret += 5;
+          }
+          
+          return ret;
+      }
+      
+      int gun(int n)
+      {
+          int ret = 0;
+          int i = 0;
+          
+          for(i=0; i<n; i++)
+          {
+              printf("Gun attack: %d\n", 10);
+              ret += 10;
+          }
+          
           return ret;
       }
       
       int main()
       {
-          int a[] = {1, 2, 3, 4, 5};
-      
-          printf("1 + ... + 5 = %d\n", calculate(a, 5, add));
-          printf("1 * ... * 5 = %d\n", calculate(a, 5, mul));
-      
+          fight(knife, 3);
+          fight(sword, 4);
+          fight(gun, 5);
+          
           return 0;
       }
       ```

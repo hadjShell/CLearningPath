@@ -551,6 +551,27 @@ void q10_1(void) {
     }
 }
 
+void q10_2(void) {
+    char s1[81];
+    char s2[81];
+    char* p = NULL;
+
+    gets(s1);
+    gets(s2);
+    int s2Len = strlen(s2);
+    p = strstr(s1, s2);
+
+    while(p) {
+        while(*p != '\0') {
+            *p = *(p + s2Len);
+            p++;
+        }
+        p = strstr(s1, s2);
+    }
+
+    puts(s1);
+}
+
 void q10_3(void) {
     char s[81] = {0};
     gets(s);
@@ -563,8 +584,32 @@ void q10_3(void) {
     printf("\n");
 }
 
+void q10_4(void) {
+    char s[101];
+    char ret[101];
+    int n;
+
+    gets(s);
+    scanf("%d", &n);
+
+    int len = strlen(s);
+    int offset = n % len;
+
+    for(int i = 0; i < len; i++) {
+        if(i < offset) {
+            ret[len - offset + i] = s[i];
+        }
+        else {
+            ret[i - offset] = s[i];
+        }
+    }
+    ret[len] = '\0';
+
+    puts(ret);
+}
+
 int main(int argc, const char* argv[]) {
-    q10_3();
+    q10_4();
 
     return 0;
 }

@@ -320,8 +320,25 @@ void q5_3(void) {
     printf("%d\n", sum);
 }
 
-void q6_2() {
-    // finish after string learning
+void q6_2(void) {
+    char str[41] = {0};
+    char* p = str;
+    char c = getchar();
+    while(c != '#') {
+        *p++ = c;
+        c = getchar();
+    }
+
+    p = str;
+    while(*p != 0) {
+        if(*p >= 'a' && *p <= 'z')
+            *p -= 32;
+        else if(*p >= 'A' && *p <= 'Z')
+            *p += 32;
+        p++;
+    }
+
+    printf("%s\n", str);
 }
 
 void q6_3(void) {
@@ -496,20 +513,58 @@ void q8_3(void) {
 
 void diffTrinity(void);
 
-void t1(void) {}
-void t2(void) {}
-void t3(void) {}
+void q10_0(void) {
+    char sen[81] = {0};
+    gets(sen);
+    int len = strlen(sen);
+    char* p = sen + len - 1;
+    int i = 0;
 
-int main() {
-    //q8_3();
-    char s1[6] = "hello";
-    char s2[4];
+    if(*p == ' ') {
+        *p-- = '\0';
+        i++;
+    }
 
-    strncpy(s2, s1, 3);
+    for(; i < len; i++) {
+        if(*p == ' ') {
+            printf("%s ", p + 1);
+            *p = '\0';
+        }
+        p--;
+    }
+    printf("%s\n", sen);
+}
 
-    printf("%p\n", s1);
-    printf("%p\n", s2);
-    printf("%s", s2);
+void q10_1(void) {
+    char str[81] = {0};
+    char c;
+    gets(str);
+    c = getchar();
+
+    char* p = strchr(str, c);
+
+    if(!p) {
+        printf("NOT FOUND\n");
+    }
+    else {
+        printf("%s\n", p);
+    }
+}
+
+void q10_3(void) {
+    char s[81] = {0};
+    gets(s);
+
+    char* p = s + strlen(s) - 1;
+    while(p != s) {
+        putchar(*p--);
+    }
+    putchar(s[0]);
+    printf("\n");
+}
+
+int main(int argc, const char* argv[]) {
+    q10_3();
 
     return 0;
 }

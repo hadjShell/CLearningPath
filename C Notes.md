@@ -999,3 +999,21 @@ Date: 06/02/2022
     * `char* strcasestr(const char* s1, const char* s2);`
   
   * `strtok`
+
+***
+
+## 枚举
+
+* 常量符号化：`const`
+* 枚举是一种用户定义的数据类型，意义是给一些可以排列起来的常量值名字
+* `enum typeName {name 1, name 2, ..., name n};`
+* 声明枚举量可以指定值
+* 枚举类型名字通常并不真的使用，要用的是大括号里的名字，因为它们就是常量符号，类型是`int`，值则依次从`0`到`n`
+* 定义枚举变量：`enum typeName var = name 1;`
+* 套路：自动计数的枚举 `enum COLOR {RED, YELLOW, GREEN, NumCOLORS};`
+* 虽然枚举可以当作类型使用，但实际上很少用
+* 如果有意义上排比的名字，用枚举比`const int`方便
+* 枚举比宏好，因为枚举量有`int`类型
+
+***
+

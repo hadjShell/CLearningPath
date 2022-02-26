@@ -1009,6 +1009,7 @@ Date: 06/02/2022
 * `enum typeName {name 1, name 2, ..., name n};`
 * 声明枚举量可以指定值
 * 枚举类型名字通常并不真的使用，要用的是大括号里的名字，因为它们就是常量符号，类型是`int`，值则依次从`0`到`n`
+* 类型名字可以省略
 * 定义枚举变量：`enum typeName var = name 1;`
 * 套路：自动计数的枚举 `enum COLOR {RED, YELLOW, GREEN, NumCOLORS};`
 * 虽然枚举可以当作类型使用，但实际上很少用
@@ -1017,3 +1018,78 @@ Date: 06/02/2022
 
 ***
 
+## 自定义数据类型
+
+### 结构体
+
+* 结构类型声明，定义，访问结构变量，初始化
+
+  ```c
+  // First form
+  struct <yourType> {
+      <type> var1;
+      <type> var2;
+      <type> var3;
+  };
+  
+  struct <yourType> yourVar;
+  
+  // Second form
+  struct {
+      <type> var1;
+      <type> var2;
+      <type> var3;
+  }yourVar1, yourVar2;
+  
+  // Third form
+  struct <yourType> {
+      <type> var1;
+      <type> var2;
+      <type> var3;
+  }yourVar1, yourVar2;
+  
+  // access
+  yourVar.var1 = <value>;
+  
+  // Initialisation
+  struct <yourType> yourVar1 = {<value1>, <value2>, <value3>};
+  struct <yourType> yourVar1 = {.var1 = <value1>, .var2 = <value2>};	// yourVar1.var3 == 0
+  ```
+
+  * 在函数内部声明的结构类型只能在函数内部使用
+  * 通常在函数外部声明结构类型
+
+* 结构运算
+
+  * 访问整个结构
+  * 赋值
+    * `struct <type> var;	var = (struct <type>){<value>, };`
+    *  `var1 = var2;`
+  * 取地址
+    * 结构变量的名字并不是结构变量的地址，必须使用`&`运算符
+    * `struct <type>* pVar = &var;` 
+    * 用指针变量访问结构成员：`(*p).var`或者**`p->var`**
+    * `.`，`->`优先级高于`&`
+  * 传给函数参数
+
+* 结构与函数
+
+  * 整个结构作为参数的值传入函数
+  * 函数内新建一个结构变量，复制调用结构变量的值
+  * 可以返回一个结构
+
+* 输入结构
+
+  * 没有直接的方式可以一次`scanf`一个结构
+  * 可以自己写一个函数
+    * `struct <type> getStruct(void);`
+    * `struct <type>* getStruct(struct <type>* p);`
+      * 返回传进来的指针的好处是可以把程序连起来
+
+* 结构数组
+
+* 结构中的结构
+
+### `typedef`
+
+* 

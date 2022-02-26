@@ -608,14 +608,17 @@ void q10_4(void) {
     puts(ret);
 }
 
+struct date {
+    int year;
+    int month;
+    int date;
+};
+
 int main(int argc, const char* argv[]) {
     //q10_4();
-    int a[5] = {1, 2, 3, 4, 5};
-    int* p1 = (int*)(&a + 1);
-    int* p2 = (int*)((int)a + 1);
-    int* p3 = (int*)(a + 1);
-
-    printf("%d, %d, %d\n", p1[-1], p2[0], p3[1]);
+    struct date today;
+    today = (struct date){2022, 2, 26};
+    printf("%i-%i-%i\n", today.year, today.month, today.date);
 
     return 0;
 }
@@ -640,4 +643,13 @@ void diffTrinity(void) {
 	printf("sizeof(&array) = %d\n", sizeof(&array));
 
 	printf("\n");
+}
+
+void aTrickyProblem(void) {
+    int a[5] = {1, 2, 3, 4, 5};
+    int* p1 = (int*)(&a + 1);
+    int* p2 = (int*)((int)a + 1);
+    int* p3 = (int*)(a + 1);
+
+    printf("%d, %d, %d\n", p1[-1], p2[0], p3[1]);
 }

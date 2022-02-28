@@ -608,17 +608,68 @@ void q10_4(void) {
     puts(ret);
 }
 
-struct date {
-    int year;
-    int month;
-    int date;
-};
+typedef struct {
+    double x;
+    double y;
+} Vector;
+
+void getVector(Vector* v) {
+    scanf("%lf", &(v -> x));
+    scanf("%lf", &(v -> y));
+}
+
+void q11_0(void) {
+    Vector v1;
+    Vector v2;
+    Vector vRet;
+    getVector(&v1);
+    getVector(&v2);
+    vRet.x = v1.x + v2.x;
+    vRet.y = v1.y + v2.y;
+    printf("(%.1f, %.1f)\n", vRet.x, vRet.y);
+}
+
+typedef struct {
+    char name[11];
+    char dob[11];
+    char gender;
+    char tele[17];
+    char phone[17];
+} Address;
+
+void getAddress(Address* a) {
+    scanf("%s %s %c %s %s", a -> name, a -> dob, &(a -> gender), a -> tele, a -> phone);
+}
+
+void putAddress(Address* a) {
+    printf("%s %s %s %c %s\n", a -> name, a -> tele, a -> phone, a -> gender, a -> dob);
+}
+
+void q11_1(void) {
+    int n;
+    scanf("%d", &n);
+    Address addressBook[n];
+    for(int i = 0; i < n; i++) {
+        getAddress(&addressBook[i]);
+    }
+
+    int k;
+    scanf("%d", &k);
+    int idx[k];
+    for(int i = 0; i < k; i++) {
+        scanf("%d", &idx[i]);
+    }
+
+    for(int i = 0; i < k; i++) {
+        if(idx[i] >= 0 && idx[i] < n)
+            putAddress(&addressBook[idx[i]]);
+        else
+            printf("NOT FOUND\n");
+    }
+}
 
 int main(int argc, const char* argv[]) {
-    //q10_4();
-    struct date today;
-    today = (struct date){2022, 2, 26};
-    printf("%i-%i-%i\n", today.year, today.month, today.date);
+    q11_1();
 
     return 0;
 }

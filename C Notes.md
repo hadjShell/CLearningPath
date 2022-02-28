@@ -1007,10 +1007,12 @@ Date: 06/02/2022
 * 常量符号化：`const`
 * 枚举是一种用户定义的数据类型，意义是给一些可以排列起来的常量值名字
 * `enum typeName {name 1, name 2, ..., name n};`
+* 枚举类型本质上是**整型**
 * 声明枚举量可以指定值
 * 枚举类型名字通常并不真的使用，要用的是大括号里的名字，因为它们就是常量符号，类型是`int`，值则依次从`0`到`n`
 * 类型名字可以省略
 * 定义枚举变量：`enum typeName var = name 1;`
+* 枚举变量本质上是**整型变量**
 * 套路：自动计数的枚举 `enum COLOR {RED, YELLOW, GREEN, NumCOLORS};`
 * 虽然枚举可以当作类型使用，但实际上很少用
 * 如果有意义上排比的名字，用枚举比`const int`方便
@@ -1021,6 +1023,10 @@ Date: 06/02/2022
 ## 自定义数据类型
 
 ### 结构体
+
+* 结构体变量的本质是变量的集合
+
+* 结构体变量中的成员占用独立的内存
 
 * 结构类型声明，定义，访问结构变量，初始化
 
@@ -1058,6 +1064,7 @@ Date: 06/02/2022
 
   * 在函数内部声明的结构类型只能在函数内部使用
   * 通常在函数外部声明结构类型
+  * 不同无名结构体变量，尽管内部成员变量类型都相同，也不是同一数据类型
 
 * 结构运算
 
@@ -1090,6 +1097,84 @@ Date: 06/02/2022
 
 * 结构中的结构
 
+* 位域：利用结构体类型指定成员变量占用内存的比特位宽度
+
+  * 某些特殊场合，远古代码中可能被使用
+  * 位域成员必须是整型，占用位数不能超过类型宽度
+  * 当存储位不足时，自动启用新存储单元
+  * 可以舍弃当前未使用的位，重新启用存储单元
+
+  ```c
+  struct BW {
+      unsigned char a : 4;	// a 占用一个字节的4位宽度
+      unsigned char b : 5;	// b 占用一个字节的5位宽度
+      unsigned char   : 0;	// 重启一个存储单元表示新的成员
+      unsigned char c : 2;	// c 占用一个字节的2位宽度
+  }
+  ```
+
 ### `typedef`
 
-* 
+* 声明一个已有数据类型的新名字
+
+* 没有创建新类型，只是创建了类型别名
+
+* `typedef <type> <newTypeName>;`
+
+* 改善了程序的可读性
+
+  ```c
+  // typedef basic data type
+  typedef unsigned char byte;
+  
+  // typedef function type
+  int func(int a);
+  int (*pFunc)(int) = func;
+  typedef int(IFuncI)(int);
+  IFuncI* pFunc = func;
+  
+  // typedef array type
+  float array[5];
+  float (*pArray)[5] = &array;
+  typedef float(FArr5)[5];
+  FArr5* pArray = &array;
+  
+  // typedef struct type
+  typedef struct Node {
+      double x;
+      double y;
+  }
+  Node aNode = {0.0, 0.0};	// rather than struct Node aNode;
+  ```
+
+### 联合
+
+* `union`
+
+* 语法上和`struct`一样
+
+* `sizeof(union <name>) == sizeof(每个成员)的最大值`
+
+* 所有成员共享一个空间
+
+* 同一时间只有一个成员是有效的
+
+* `union`类型的变量只能以第一个成员类型的有效值进行初始化
+
+* 应用
+
+  * 判断系统大小端
+
+    ```c
+    int isLittleEndian() {
+        union {
+            int i;
+            char a[4];
+        }test;
+        test.i = 1;
+        return (test.a[0] == 1);
+    }
+    ```
+
+***
+

@@ -1215,6 +1215,7 @@ Date: 06/02/2022
 * 没有值的宏
   * 例：`#define _DEBUG`
   * 这类宏是用于条件编译的，后面有其他的编译预处理指令来检查这个宏是否已经被定义过了
+  * 定义宏编译指令：`gcc -DMACRO=1 file.c`
 
 * 预定义的宏
   * `__LINE__`：当前所在行的行号
@@ -1336,8 +1337,8 @@ Date: 06/02/2022
   * 运用条件编译和宏，保证这个头文件在一个编译单元中只会被`#include`一次
 
     ```h
-    #ifndef __LIST_HEAD__
-    #define __LIST_HEAD__
+    #ifndef __LIST_H__
+    #define __LIST_H__
     
     #include "node.h"
     
@@ -1457,6 +1458,49 @@ Date: 06/02/2022
         * `dlopen`：打开动态库文件
         * `dlsym`：查找动态库中的函数并返回调用地址
         * `dlclose`：关闭动态库文件
+
+* 条件编译
+
+  * 条件编译是**预编译**指示命令，用于控制是否编译某段代码
+
+    ```c
+    #if (C == 1)
+    /*
+    #ifdef C
+    #ifndef C
+    */
+    	// statements
+    #else
+    	//statements
+    #endif
+    ```
+
+  * 实际工程中条件编译主要用于以下两种情况：
+
+    * 不同产品线共用一份代码
+    * 区分编译产品的调试版和发布版
+
+* `#error`，`#warning`
+
+  * 用于生成一个自定义的编译错误消息/警告
+
+  * 用法：`#error message`，`message`不需要双引号
+
+  * 是一个预编译器指示字
+
+  * 可用于提示编译条件是否满足
+
+    例：
+
+    ```c
+    #ifndef __cplusplus
+    	#error This file should be processed with C++ compiler.
+    #endif
+    ```
+
+  * 编译过程中的任意错误信息意味着无法生成最终的可执行程序
+
+* 
 
 ***
 

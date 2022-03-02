@@ -668,6 +668,12 @@ void q11_1(void) {
     }
 }
 
+// #define _RELEASE
+#ifndef _RELEASE
+    #error "This is a project you shouldn't use!"
+#endif
+
+
 int main(int argc, const char* argv[]) {
     // q11_1();
     printf("%s\n%s\n", __TIME__, __TIME__);

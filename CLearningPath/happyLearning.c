@@ -668,7 +668,7 @@ void q11_1(void) {
     }
 }
 
-// #define _RELEASE
+#define _RELEASE
 #ifndef _RELEASE
     #error "This is a project you shouldn't use!"
 #endif

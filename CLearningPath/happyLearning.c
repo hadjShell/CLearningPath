@@ -676,7 +676,7 @@ void q11_1(void) {
 
 int main(int argc, const char* argv[]) {
     // q11_1();
-    printf("%s\n%s\n", __TIME__, __TIME__);
+    printf("%.9s%s\n", "HI", "me");
     return 0;
 }
 
